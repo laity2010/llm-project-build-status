@@ -2,19 +2,13 @@
 
 ## State
 - DONE
-- Step 5 / Phase 4 completed: Group Chat Round 2 scoring pipeline implemented and executed.
+- Step 5 / Phase 4 re-run completed: Group Chat Round 2 scoring executed with uv and outputs refreshed.
 
 ## Completed
-- Added Round 2 orchestrator flow (`GroupChatRound2.run`) to:
-  - Read Round 1 replies from `outputs/llm-web-arena/conversation_history.json`
-  - Build per-AI scoring prompts
-  - Parse strict JSON responses with one retry on invalid output
-  - Record `null` scores and error metadata when JSON remains invalid
-  - Aggregate totals/averages and produce ranking
-- Added CLI mode `groupchat_round2`.
-- Appended Round 2 prompt/response messages back into `conversation_history.json`.
-- Wrote scoreboard to `outputs/llm-web-arena/scores.json`.
-- Ensured uv workflow execution (`uv venv`, `uv pip install -r requirements.txt`, `uv run ...`).
+- Re-ran uv environment workflow (`uv venv`, `uv pip install -r requirements.txt`).
+- Executed `groupchat_round2` via `uv run`.
+- Verified `conversation_history.json` appended with Round 2 prompt/response records.
+- Verified `scores.json` refreshed with evaluations, summary, and ranking.
 
 ## Command Results (2026-02-28)
 - `uv venv` -> success
@@ -22,20 +16,17 @@
 - `uv run python3 -m web_llm_arena.cli --mode groupchat_round2 --config config.example.json` -> exit 0
 
 ## Output
-- `outputs/llm-web-arena/conversation_history.json` updated with Round 2 entries.
-- `outputs/llm-web-arena/scores.json` generated with:
-  - `evaluations`
-  - `scoreboard.summary`
-  - `scoreboard.ranking`
+- `outputs/llm-web-arena/conversation_history.json` updated.
+- `outputs/llm-web-arena/scores.json` updated.
 
-## Round 2 Parse Notes
-- chatgpt: valid JSON scoring parsed.
-- gemini: invalid JSON after retry -> recorded as `scores=null` with error.
-- grok: invalid JSON after retry (including usage-limit response) -> recorded as `scores=null` with error.
-- Aggregation computed from available valid peer scores, per fallback design.
+## Parse Notes
+- chatgpt: valid JSON parsed.
+- gemini: invalid JSON after retry -> `scores=null` with error recorded.
+- grok: invalid JSON after retry -> `scores=null` with error recorded.
+- Ranking computed from available valid peer scores.
 
 ## Updated At
-- 2026-02-28 12:03 (Asia/Shanghai)
+- 2026-02-28 12:16 (Asia/Shanghai)
 
 ## Raw Link
 - https://raw.githubusercontent.com/laity2010/llm-project-build-status/main/outbox/llm-web-arena/STATUS.md
