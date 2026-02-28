@@ -2,31 +2,42 @@
 
 ## State
 - DONE
-- Step 5 / Phase 4 re-run completed: Group Chat Round 2 scoring executed with uv and outputs refreshed.
+- Step 6 / Phase 5 completed: Group Chat Round 3 voting executed and final report generated.
 
 ## Completed
-- Re-ran uv environment workflow (`uv venv`, `uv pip install -r requirements.txt`).
-- Executed `groupchat_round2` via `uv run`.
-- Verified `conversation_history.json` appended with Round 2 prompt/response records.
-- Verified `scores.json` refreshed with evaluations, summary, and ranking.
+- Ensured uv environment and dependencies are ready (`uv venv`, `uv pip install -r requirements.txt`).
+- Executed `groupchat_round3` via `uv run` and attached to existing Chrome debug sessions.
+- Round 3 voting completed with JSON parsing + retry logic; invalid JSON case recorded as `null` with error.
+- Updated outputs:
+  - `outputs/llm-web-arena/conversation_history.json` (Round 3 prompt/response records appended)
+  - `outputs/llm-web-arena/scores.json` (added `round3` vote tally, winner, ranking)
+  - `outputs/llm-web-arena/debate_result.md` and `outputs/llm-web-arena/report_final.md`
+- Applied report compatibility fix so Round 1 summary can read legacy messages without `meta.round` markers.
 
 ## Command Results (2026-02-28)
 - `uv venv` -> success
 - `uv pip install -r requirements.txt` -> success
-- `uv run python3 -m web_llm_arena.cli --mode groupchat_round2 --config config.example.json` -> exit 0
+- `uv run python3 -m web_llm_arena.cli --mode groupchat_round3 --config config.example.json` -> exit 0
 
-## Output
-- `outputs/llm-web-arena/conversation_history.json` updated.
-- `outputs/llm-web-arena/scores.json` updated.
+## Round 3 Result Snapshot
+- vote_tally:
+  - chatgpt: 0
+  - gemini: 2
+  - grok: 0
+- majority_winner: `gemini`
+- final_winner: `gemini`
+- winner_reason: `majority vote winner with 2 votes`
+- final_ranking:
+  1. gemini
+  2. grok
+  3. chatgpt
 
-## Parse Notes
-- chatgpt: valid JSON parsed.
-- gemini: invalid JSON after retry -> `scores=null` with error recorded.
-- grok: invalid JSON after retry -> `scores=null` with error recorded.
-- Ranking computed from available valid peer scores.
+## Notes
+- grok response in this run did not return valid JSON after retry (rate-limit style page text); recorded as `vote=null` with parse error.
+- No token/cookie/authorization secrets were written into this public status file.
 
 ## Updated At
-- 2026-02-28 12:16 (Asia/Shanghai)
+- 2026-02-28 12:57 (Asia/Shanghai)
 
 ## Raw Link
 - https://raw.githubusercontent.com/laity2010/llm-project-build-status/main/outbox/llm-web-arena/STATUS.md
