@@ -2,31 +2,33 @@
 
 ## State
 - DONE
-- Step 3 / Phase 2 completed: uv environment + locator_test passed for chatgpt, gemini, grok.
+- Step 4 / Phase 3 completed: Group Chat Round 1 implemented and executed successfully.
 
 ## Completed
-- Task record synced to `inbox/llm-web-arena/TASK.md` and pushed before execution.
-- Created `requirements.txt` and installed dependencies via uv.
-- Executed `uv venv` to manage `.venv`.
-- Added `resolver.py` with `find_first(driver, locator_list, timeout_s)` multi-locator fallback.
-- Extended CLI `--mode locator_test` to resolve `input`, `send`, `reply_container`.
-- Updated config model and `config.example.json` to dictionary-based locator lists (`by` + `value`).
+- Added site adapters with unified interface:
+  - `send(text)`
+  - `read_latest_reply_text()`
+  - `wait_reply_done()`
+- Added `reply_done.py` polling logic for reply completion.
+- Added `orchestrator.py` with `GroupChatRound1.run(topic)` using `ThreadPoolExecutor`.
+- Added CLI mode `groupchat_round1` with `--topic`.
+- Added structured output writing to `outputs/llm-web-arena/conversation_history.json`.
+- Kept uv-based environment workflow (`uv venv`, `uv pip install -r requirements.txt`, `uv run ...`).
 
-## uv Commands Executed
-- `uv venv`
-- `uv pip install -r requirements.txt`
+## Command Results (2026-02-28)
+- `uv venv` -> success
+- `uv pip install -r requirements.txt` -> success
+- `uv run python3 -m web_llm_arena.cli --mode groupchat_round1 --topic "2026 年最佳编程语言是什么？给出理由和实施方案" --config config.example.json` -> exit 0
 
-## Locator Test Results (2026-02-28)
-- `uv run python -m web_llm_arena.cli --mode locator_test --ai chatgpt --config config.example.json` -> exit 0
-- `uv run python -m web_llm_arena.cli --mode locator_test --ai gemini  --config config.example.json` -> exit 0
-- `uv run python -m web_llm_arena.cli --mode locator_test --ai grok    --config config.example.json` -> exit 0
+## Output
+- `outputs/llm-web-arena/conversation_history.json` generated with system + assistant messages for chatgpt/gemini/grok.
 
 ## Notes
-- Failure diagnostics remain available under local `debug_screenshots/` from earlier retries.
-- Sensitive-string redaction remains enabled via `diagnostics.py`.
+- Round 1 run used existing attached Chrome debug instances on ports 9222/9223/9224.
+- Diagnostics with sensitive-redaction remain enabled for failure paths.
 
 ## Updated At
-- 2026-02-28 10:15 (Asia/Shanghai)
+- 2026-02-28 11:22 (Asia/Shanghai)
 
 ## Raw Link
 - https://raw.githubusercontent.com/laity2010/llm-project-build-status/main/outbox/llm-web-arena/STATUS.md
