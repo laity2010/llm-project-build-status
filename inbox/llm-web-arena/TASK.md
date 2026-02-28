@@ -1,19 +1,13 @@
 # TASK - llm-web-arena
 
 ## Step
-3
+4
 
 ## Phase
-2 – Element Resolver & Locator Test (包含 uv 环境管理)
-
-## 重要新增要求：使用 uv 管理环境与依赖
-- 在执行任何依赖安装或虚拟环境创建时，必须使用 [uv](https://docs.astral.sh/uv/) 工具。
-- 首次运行时，应在项目根目录执行 `uv venv` 创建 `.venv` 环境；之后所有包安装均使用 `uv pip install …`。
-- uv 会自动创建和管理虚拟环境并高效安装依赖，减少版本冲突和速度问题 [oai_citation:0‡docs.astral.sh](https://docs.astral.sh/uv/pip/environments/#:~:text=Python%20installations%20that%20come%20with,a%20virtual%20environment%20by%20default)。
-- 本项目所需的依赖应写入 `pyproject.toml` 或 `requirements.txt`，并通过 `uv pip install -r requirements.txt` 安装。以后如有新增依赖，也必须通过 uv 安装。
+3 – Group Chat Round 1
 
 ## Goal
-为 ChatGPT、Gemini、Grok 三个站点实现可配置的多定位器解析器，并通过 `locator_test` 模式验证每个站点的输入框、发送按钮和回复容器都能找到，且整个项目依赖管理由 uv 负责。
+为 ChatGPT、Gemini、Grok 三个站点实现“群聊 Round 1”功能：每个 AI 独立回答相同话题并记录完整对话历史。所有代码必须在 uv 虚拟环境中运行。
 
 ## Work Repo (private/local)
 `/Users/daisor/Documents/Github/Ds2026/llm-web-arena`
@@ -23,31 +17,48 @@
 
 ## Required Code Changes (in work repo)
 
-1. **使用 uv 初始化和安装依赖**  
-   - 在项目根目录运行 `uv venv` 创建虚拟环境（若不存在）。  
-   - 使用 `uv pip install` 安装 selenium、pydantic、tenacity、loguru、rich 等依赖，并确保 `pyproject.toml` 或 `requirements.txt` 中记录了这些依赖。
-   - 后续开发若需新增包，一律通过 `uv pip install` 安装。
+1. **完善 Site Adapter**  
+   - 确保 `adapters/chatgpt.py`、`adapters/gemini.py`、`adapters/grok.py` 均实现统一接口：  
+     * `send(text: str)`: 将 prompt 输入到对应站点（包含随机延迟）。  
+     * `read_latest_reply_text() -> str`: 返回最新一条完整回复文本。  
+     * `wait_reply_done() -> str`: 调用 reply_done.py 中的判定逻辑，等待回复结束并返回完整文本。  
+   - 如适用，先在各 adapter 中调用已有的 `resolver.find_first` 查找输入框、发送按钮、回复容器。
 
-2. **创建 `resolver.py` 模块**  
-   - 实现 `find_first(driver, locator_list, timeout_s=15) -> (element, hit_index)`：  
-     * `locator_list` 是包含多个定位方式与表达式的字典列表，例如 `{"by": "css", "value": "textarea[data-id='root']"}`。  
-     * 逐个尝试定位，每次使用 `WebDriverWait` 与期望条件，成功返回元素及命中索引；全部失败则调用诊断逻辑并抛出异常。
+2. **实现 Group Chat Round 1 Orchestrator**  
+   - 在 `orchestrator.py` 中新增 `GroupChatRound1.run(topic: str)`：  
+     * 使用 `ThreadPoolExecutor` 并发或顺序（时间差 < 3 秒）向三家 AI 发送相同的 topic。  
+     * 调用各 adapter 的 `wait_reply_done()` 获取完整回复；  
+     * 将话题和回复以结构化形式写入 `conversation_history.json`（位于 `outputs/llm-web-arena`），格式示例：  
+       ```json
+       {
+         "messages": [
+           {"ai": "chatgpt", "role": "system", "timestamp": "...", "content": "…"},
+           {"ai": "chatgpt", "role": "assistant", "timestamp": "...", "content": "…"},
+           {"ai": "gemini", "role": "assistant", "timestamp": "...", "content": "…"},
+           {"ai": "grok", "role": "assistant", "timestamp": "...", "content": "…"}
+         ]
+       }
+       ```  
+     * 结果保存在 `outputs/llm-web-arena/conversation_history.json`。
 
-3. **扩展 CLI**  
-   - 在 `cli.py` 中新增 `--mode locator_test`：  
-     * 读取配置文件中每个站点的 `locators` 列表。  
-     * 依次解析并查找输入框、发送按钮、回复容器。  
-     * 成功则打印 `[ai][LOCATOR][OK] input hit=1` 等信息；失败则保存诊断信息并返回失败状态码。
+3. **新增 CLI 模式**  
+   - 在 `cli.py` 中添加 `--mode groupchat_round1`，参数包括 `--topic`。  
+   - 调用 `GroupChatRound1.run(topic)` 并完成上述输出。
 
-4. **配置文件更新**  
-   - 确保 `config.example.json` 中包含每个站点的 `locators` 列表（input/send/reply_container），以便解析器使用。  
-   - 确保端口、URL、超时时间等配置正确无误。
+4. **更新依赖与虚拟环境**  
+   - 如有新增依赖（例如 `concurrent.futures` 已内置但其他包需安装），必须使用 `uv pip install` 安装，并更新 `requirements.txt` / `pyproject.toml`。  
+   - 所有运行命令均使用 uv 环境，如 `uv run python3 -m web_llm_arena.cli ...`。
 
 ## Commands to Run
-先使用 uv 安装依赖并创建虚拟环境：
 
 ```bash
-cd /Users/daisor/Documents/Github/Ds2026/llm-web-arena
-uv venv  # 如已存在虚拟环境可跳过
-uv pip install -r requirements.txt  # 安装依赖
+# 在私有仓库根目录，确保 uv 环境和依赖最新
+uv venv           # 如未创建虚拟环境
+uv pip install -r requirements.txt
+
+# 运行 Round 1 群聊
+uv run python3 -m web_llm_arena.cli \
+  --mode groupchat_round1 \
+  --topic "2026 年最佳编程语言是什么？给出理由和实施方案" \
+  --config config.example.json
 ```
