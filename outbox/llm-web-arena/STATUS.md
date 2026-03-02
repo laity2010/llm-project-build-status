@@ -1,43 +1,28 @@
 # STATUS - llm-web-arena
 
 ## State
-- DONE
-- Step 6 / Phase 5 completed: Group Chat Round 3 voting executed and final report generated.
+- IN_PROGRESS
+- Current step: Step 5 / Phase 4 (`groupchat_round2`)
 
-## Completed
-- Ensured uv environment and dependencies are ready (`uv venv`, `uv pip install -r requirements.txt`).
-- Executed `groupchat_round3` via `uv run` and attached to existing Chrome debug sessions.
-- Round 3 voting completed with JSON parsing + retry logic; invalid JSON case recorded as `null` with error.
-- Updated outputs:
-  - `outputs/llm-web-arena/conversation_history.json` (Round 3 prompt/response records appended)
-  - `outputs/llm-web-arena/scores.json` (added `round3` vote tally, winner, ranking)
-  - `outputs/llm-web-arena/debate_result.md` and `outputs/llm-web-arena/report_final.md`
-- Applied report compatibility fix so Round 1 summary can read legacy messages without `meta.round` markers.
+## Latest Progress (2026-03-02)
+- ChatGPT single-path verification passed for Round1 topic (attach + send + wait_reply_done).
+- Three-party `groupchat_round1` rerun completed successfully.
+- Output refreshed: `outputs/llm-web-arena/conversation_history.json` (topic + 3 assistant replies).
+- `groupchat_round2` was started in this cycle but manually aborted before completion.
 
-## Command Results (2026-02-28)
-- `uv venv` -> success
-- `uv pip install -r requirements.txt` -> success
-- `uv run python3 -m web_llm_arena.cli --mode groupchat_round3 --config config.example.json` -> exit 0
+## Command Results (this cycle)
+- `uv run --active python3 -m web_llm_arena.cli --mode groupchat_round1 --topic "什么问题，人类正在用错误的方式解决？" --config config.example.json` -> exit 0
+- `uv run --active python3 -m web_llm_arena.cli --mode groupchat_round2 --config config.example.json` -> started, then manually aborted
 
-## Round 3 Result Snapshot
-- vote_tally:
-  - chatgpt: 0
-  - gemini: 2
-  - grok: 0
-- majority_winner: `gemini`
-- final_winner: `gemini`
-- winner_reason: `majority vote winner with 2 votes`
-- final_ranking:
-  1. gemini
-  2. grok
-  3. chatgpt
+## Next Action
+- Re-run `groupchat_round2` to regenerate stable scoring output (`scores.json`) for this cycle.
 
-## Notes
-- grok response in this run did not return valid JSON after retry (rate-limit style page text); recorded as `vote=null` with parse error.
-- No token/cookie/authorization secrets were written into this public status file.
+## Security
+- Public status excludes token/cookie/authorization/secrets.
+- Any suspected sensitive string must be replaced with `***REDACTED***`.
 
 ## Updated At
-- 2026-02-28 12:57 (Asia/Shanghai)
+- 2026-03-02 20:41 (Asia/Shanghai)
 
 ## Raw Link
 - https://raw.githubusercontent.com/laity2010/llm-project-build-status/main/outbox/llm-web-arena/STATUS.md
