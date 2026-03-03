@@ -1,6 +1,6 @@
 # llm-web-arena / ver01
 
-LAST_UPDATE: 2026-03-03 21:23 (Asia/Singapore)
+LAST_UPDATE: 2026-03-03 22:05 (Asia/Singapore)
 OWNER: codex
 STATE: ROUND2_BLOCKED
 GOAL: Automate duel run status artifacts and deterministic control-plane rendering.
@@ -14,15 +14,15 @@ DEFINITION_OF_DONE:
 ## CURRENT
 - Last run: PASS
 - Last failure stage: WAIT_INPUT_READY
-- Last 10 runs: FAIL FAIL FAIL FAIL FAIL FAIL FAIL PASS PASS PASS
-- Runs today: 18
-- Consecutive pass: 3
-- Pass rate (last 20): 6/20 (30.0%)
+- Last 10 runs: FAIL FAIL FAIL FAIL FAIL FAIL PASS PASS PASS PASS
+- Runs today: 19
+- Consecutive pass: 4
+- Pass rate (last 20): 7/20 (35.0%)
 - Most common fail_stage (last 20): SEND_CLICKED (4)
 
 ## HEALTH_METRICS
-- Last 20 runs pass rate: 6/20 (30.0%)
-- Consecutive pass: 3
+- Last 20 runs pass rate: 7/20 (35.0%)
+- Consecutive pass: 4
 - Failure distribution by fail_stage: SEND_CLICKED=4, WAIT_INPUT_READY=4, UNKNOWN=2, INPUT_DONE=1, WAIT_STREAM_END=1
 - Regression detection: NO (none)
 
@@ -47,8 +47,9 @@ DEFINITION_OF_DONE:
 ## EVIDENCE
 - Failing stage: NONE
 - Logs:
-  - outbox/llm-web-arena/artifacts/notes/grok_send_confirm_bottleneck_20260303_212203.md
-  - outbox/llm-web-arena/artifacts/notes/serialtabs_smoke_20260303_131412-7f1f2b56.json
+  - outbox/llm-web-arena/artifacts/notes/grok_stage_split_distribution_20260303_220500.json
+  - outbox/llm-web-arena/artifacts/notes/grok_stage_split_distribution_20260303_220500.md
+  - outbox/llm-web-arena/artifacts/notes/grok_stage_split_distribution_latest.json
 - Screenshots:
   - UNKNOWN
 - DOM / selectors (snippet):
@@ -84,9 +85,9 @@ Change:
 - Baseline migration snapshot; no new mitigation introduced.
 Setup:
 - Input size: 26 chars
-- Runs: 18
+- Runs: 19
 Result:
-- Pass rate: 6/18
+- Pass rate: 7/19
 - Failure mode: SEND_CLICKED: Multi-browser parallel control is unstable; move to single-browser serial tabs baseline.
 Conclusion:
 - Baseline established for future controlled experiments.
