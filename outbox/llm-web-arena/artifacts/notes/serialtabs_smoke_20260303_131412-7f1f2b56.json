@@ -1,0 +1,81 @@
+{
+  "smoke_id": "smoke-20260303_131412-7f1f2b56",
+  "timestamp_utc": "2026-03-03T13:14:12.029260+00:00",
+  "mode": "serialtabs_smoke",
+  "single_browser": true,
+  "sites": [
+    {
+      "ai": "grok",
+      "ok": true,
+      "error": "",
+      "url": "https://grok.com/",
+      "title": "Grok",
+      "reply_length": 87,
+      "reply_preview": "{\"probe\":\"ok\",\"ai\":\"grok\",\"run_id\":\"smoke-20260303_131412-7f1f2b56-grok\",\"answer\":\"OK\"}",
+      "elapsed_sec": 63.855,
+      "timeline": {
+        "send_prep_ts": "2026-03-03T13:14:12.416+00:00",
+        "adapter_send_timing": {
+          "send_begin": "2026-03-03T13:14:12.416+00:00",
+          "send_trigger": "2026-03-03T13:14:14.435+00:00",
+          "send_confirmed": "2026-03-03T13:15:16.194+00:00"
+        },
+        "send_done_ts": "2026-03-03T13:15:16.200+00:00",
+        "first_match_ts": "2026-03-03T13:15:16.236+00:00",
+        "parse_done_ts": "2026-03-03T13:15:16.236+00:00"
+      },
+      "markers_found": false,
+      "payload_error": null,
+      "reply_wait_sec": 0.036
+    },
+    {
+      "ai": "chatgpt",
+      "ok": true,
+      "error": "",
+      "url": "https://chatgpt.com/c/69a6d6b0-1f8c-832d-8d90-ba73af24379d",
+      "title": "Serialtabs测试",
+      "reply_length": 2322,
+      "reply_preview": "跳至内容 历史聊天记录 新聊天 搜索聊天 图片 应用 深度研究 Codex GPT 项目 新项目 项目规划 RAZ 投资 books Python 更多 你的聊天 Serialtabs测试 长文本处理方案 Python 自动化评测 AI 实时历史记录 Prism 写作方法 Conversation greeting 概率题解析 当前时间查询 模型介绍与对比 草莓英文r的数量 诗词与Cyber元素 Obsidian Numerals 显示小数 挪威帝王蟹之旅 枪杀CEO案件分析 网页内容总结 超自然美食档案 安装melonx到iPad 小说结局构思 丹麦与格陵兰关系 柔和马卡龙风格解析 投资决策与分散化 Codex 环境转移指南 Codex CLI 流式断连排查 代理搭建方法分析 搬瓦工介绍 投资组合风险评估 量子计算目标解析 设置 Codex 插件技能 daisor chen Plus ChatGPT 5.2 分享 你说： serialtabs pre-round1 test。请严格输出两行，不要多也不要少。第1行：JSON 对象，字段必须为：probe=ok, ai=chatgpt,...(truncated)",
+      "elapsed_sec": 5.239,
+      "timeline": {
+        "send_prep_ts": "2026-03-03T13:15:16.302+00:00",
+        "adapter_send_timing": {
+          "send_begin": "2026-03-03T13:15:16.302+00:00",
+          "send_trigger": "2026-03-03T13:15:17.128+00:00",
+          "send_confirmed": "2026-03-03T13:15:17.667+00:00"
+        },
+        "send_done_ts": "2026-03-03T13:15:17.674+00:00",
+        "first_match_ts": "2026-03-03T13:15:21.475+00:00",
+        "parse_done_ts": "2026-03-03T13:15:21.475+00:00"
+      },
+      "markers_found": false,
+      "payload_error": null,
+      "reply_wait_sec": 3.801
+    },
+    {
+      "ai": "gemini",
+      "ok": true,
+      "error": "",
+      "url": "https://gemini.google.com/app/e052453621ae5576",
+      "title": "Google Gemini",
+      "reply_length": 98,
+      "reply_preview": "{\"probe\": \"ok\", \"ai\": \"gemini\", \"run_id\": \"smoke-20260303_131412-7f1f2b56-gemini\", \"answer\": \"OK\"}",
+      "elapsed_sec": 4.465,
+      "timeline": {
+        "send_prep_ts": "2026-03-03T13:15:21.505+00:00",
+        "adapter_send_timing": {
+          "send_begin": "2026-03-03T13:15:21.505+00:00",
+          "send_trigger": "2026-03-03T13:15:22.274+00:00",
+          "send_confirmed": "2026-03-03T13:15:22.686+00:00"
+        },
+        "send_done_ts": "2026-03-03T13:15:22.694+00:00",
+        "first_match_ts": "2026-03-03T13:15:25.941+00:00",
+        "parse_done_ts": "2026-03-03T13:15:25.941+00:00"
+      },
+      "markers_found": false,
+      "payload_error": null,
+      "reply_wait_sec": 3.246
+    }
+  ],
+  "pass": true
+}
