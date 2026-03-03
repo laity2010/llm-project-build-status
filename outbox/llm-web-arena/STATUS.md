@@ -1,9 +1,9 @@
 # llm-web-arena / ver01
 
-LAST_UPDATE: 2026-03-03 13:42 (Asia/Singapore)
+LAST_UPDATE: 2026-03-03 15:20 (Asia/Singapore)
 OWNER: codex
 STATE: ROUND2_BLOCKED
-GOAL: Automate duel run status artifacts and deterministic control-plane rendering.
+GOAL: Stabilize multi-agent execution by reducing concurrency and enforcing deterministic tab-level state transitions.
 DEFINITION_OF_DONE:
 - >=20 consecutive successful runs
 - input accepted correctly
@@ -12,19 +12,19 @@ DEFINITION_OF_DONE:
 - JSON parsing success rate >=95%
 
 ## CURRENT
-- Last run: PASS
+- Last run: FAIL
 - Last failure stage: SEND_CLICKED
-- Last 10 runs: PASS FAIL FAIL PASS PASS
-- Runs today: 5
-- Consecutive pass: 2
+- Last 10 runs: PASS FAIL FAIL PASS PASS FAIL
+- Runs today: 6
+- Consecutive pass: 0
 - Pass rate (last 20): 3/20 (15.0%)
-- Most common fail_stage (last 20): INPUT_DONE (1)
+- Most common fail_stage (last 20): SEND_CLICKED (2)
 
 ## HEALTH_METRICS
 - Last 20 runs pass rate: 3/20 (15.0%)
-- Consecutive pass: 2
-- Failure distribution by fail_stage: INPUT_DONE=1, SEND_CLICKED=1
-- Regression detection: NO (none)
+- Consecutive pass: 0
+- Failure distribution by fail_stage: SEND_CLICKED=2, INPUT_DONE=1
+- Regression detection: YES (pass->fail transition)
 
 ## STATE_RULES
 - STATE derivation source: run history only (last 20 runs + consecutive pass).
@@ -35,27 +35,19 @@ DEFINITION_OF_DONE:
 
 ## BLOCKER
 - Primary fail_stage: SEND_CLICKED
-- Observed symptom: [chatgpt] send failed; diag=debug_screenshots/20260303_084327_chatgpt_send.txt
+- Observed symptom: Multi-browser parallel control is unstable; move to single-browser serial tabs baseline.
 - Hypothesis: Exactly-once click guard is violated by transient UI behavior.
 
 ## REPRO
 - Step 1: uv run --active python3 -m web_llm_arena.cli --mode groupchat_round1 --topic "什么问题，人类正在用错误的方式解决？" --config config.example.json
 - Step 2: Ensure Chrome debug ports are up and authenticated for each target site.
 - Expected: run completes and writes artifacts + rendered status.
-- Actual: PASS
+- Actual: FAIL at SEND_CLICKED (Multi-browser parallel control is unstable; move to single-browser serial tabs baseline.)
 
 ## EVIDENCE
-- Failing stage: NONE
+- Failing stage: SEND_CLICKED
 - Logs:
-  - /Users/daisor/Documents/Github/Ds2026/llm-web-arena/outbox/llm-web-arena/latest.json
-  - /Users/daisor/Documents/Github/Ds2026/llm-web-arena/outbox/llm-web-arena/runs/20260303_133937/A_reply.txt
-  - /Users/daisor/Documents/Github/Ds2026/llm-web-arena/outbox/llm-web-arena/runs/20260303_133937/B_reply.txt
-  - /Users/daisor/Documents/Github/Ds2026/llm-web-arena/outbox/llm-web-arena/runs/20260303_133937/C_reply.txt
-  - /Users/daisor/Documents/Github/Ds2026/llm-web-arena/outbox/llm-web-arena/runs/20260303_133937/README.md
-  - /Users/daisor/Documents/Github/Ds2026/llm-web-arena/outbox/llm-web-arena/runs/20260303_133937/conversation_history.json
-  - /Users/daisor/Documents/Github/Ds2026/llm-web-arena/outbox/llm-web-arena/runs/20260303_133937/manifest.json
-  - /Users/daisor/Documents/Github/Ds2026/llm-web-arena/outbox/llm-web-arena/runs/20260303_133937/round1_packet.json
-  - outputs/llm-web-arena/conversation_history.json
+  - outbox/llm-web-arena/artifacts/notes/architecture_stability_proposal_20260303_152044.md
 - Screenshots:
   - UNKNOWN
 - DOM / selectors (snippet):
@@ -86,15 +78,15 @@ DEFINITION_OF_DONE:
   - page_load_sec=30, element_wait_sec=20, reply_done_wait_sec=300, poll_interval_sec=1.0
 
 ## EXPERIMENTS (latest first)
-### E05 (2026-03-03)
+### E06 (2026-03-03)
 Change:
 - Single variable change in automation/selector strategy.
 Setup:
-- Input size: 18 chars
+- Input size: 0 chars
 - Runs: 1
 Result:
-- Pass rate: 3/5
-- Failure mode: PASS
+- Pass rate: 3/6
+- Failure mode: SEND_CLICKED (Multi-browser parallel control is unstable; move to single-browser serial tabs baseline.)
 Conclusion:
 - Needs follow-up validation.
 Next:
