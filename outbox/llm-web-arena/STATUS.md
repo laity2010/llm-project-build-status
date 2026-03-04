@@ -1,9 +1,9 @@
-# llm-web-arena / ver03
+# llm-web-arena / ver01
 
-LAST_UPDATE: 2026-03-04 07:14 (Asia/Singapore)
+LAST_UPDATE: 2026-03-04 21:25 (Asia/Singapore)
 OWNER: codex
 STATE: ROUND2_BLOCKED
-GOAL: Stabilize Grok serial-tabs execution under focus drift and anti-bot verification dynamics.
+GOAL: Establish ver01 single-browser serial-tabs Round1/Round2 pipeline with public raw handoff and reproducible artifacts.
 DEFINITION_OF_DONE:
 - >=20 consecutive successful runs
 - input accepted correctly
@@ -12,23 +12,23 @@ DEFINITION_OF_DONE:
 - JSON parsing success rate >=95%
 
 ## CURRENT
-- Last run: FAIL
+- Last run: PASS
 - Last failure stage: UNKNOWN
-- Last 10 runs: FAIL FAIL FAIL FAIL PASS PASS PASS PASS FAIL FAIL
-- Runs today: 1
-- Consecutive pass: 0
-- Pass rate (last 20): 6/20 (30.0%)
-- Most common fail_stage (last 20): SEND_CLICKED (4)
+- Last 10 runs: FAIL PASS PASS PASS PASS FAIL FAIL PASS PASS PASS
+- Runs today: 4
+- Consecutive pass: 3
+- Pass rate (last 20): 8/20 (40.0%)
+- Most common fail_stage (last 20): WAIT_INPUT_READY (4)
 
 ## HEALTH_METRICS
-- Last 20 runs pass rate: 6/20 (30.0%)
-- Consecutive pass: 0
-- Failure distribution by fail_stage: SEND_CLICKED=4, WAIT_INPUT_READY=4, UNKNOWN=3, INPUT_DONE=1, WAIT_STREAM_END=1, WAIT_STREAM_START=1
-- Grok blocked_title hit rate (last 20): 0/40 (0.0%)
-- Grok stream_start outlier rate >5s (last 20): 3/40 (7.5%)
-- Grok focus_issue hit rate (last 20): 1/20 (5.0%)
-- Grok verification hit rate (last 20): 0/20 (0.0%)
-- Grok focus↔verification overlap (last 20): N/A (no verification samples)
+- Last 20 runs pass rate: 8/20 (40.0%)
+- Consecutive pass: 3
+- Failure distribution by fail_stage: WAIT_INPUT_READY=4, SEND_CLICKED=3, UNKNOWN=3, WAIT_STREAM_END=1, WAIT_STREAM_START=1
+- Grok blocked_title hit rate (last 20): 0/42 (0.0%)
+- Grok stream_start outlier rate >5s (last 20): 5/42 (11.9%)
+- Grok focus_issue hit rate (last 20): 1/22 (4.5%)
+- Grok verification hit rate (last 20): 0/22 (0.0%)
+- Grok focus↔verification overlap (last 20): 0/2 (0.0%)
 - Regression detection: NO (none)
 
 ## STATE_RULES
@@ -44,29 +44,24 @@ DEFINITION_OF_DONE:
 - Hypothesis: UNKNOWN
 
 ## REPRO
-- Step 1: uv run --active python3 -m web_llm_arena.cli --mode serialtabs_smoke --start-ai grok --probe-text "serialtabs pre-round1 test" --probe-format json_marked --config config.example.json
+- Step 1: cd ver01 && bash scripts/mac/run_round2_serialtabs.sh
 - Step 2: Ensure Chrome debug ports are up and authenticated for each target site.
 - Expected: run completes and writes artifacts + rendered status.
-- Actual: FAIL at UNKNOWN (grok smoke batch20: pass_rate=13/20; focus_issue_hit_rate=1/20; verification_hit_rate=0/20; top_fail_stage=UNKNOWN; error_buckets={'SEND_FAILED_OTHER': 7})
+- Actual: PASS
 
 ## EVIDENCE
-- Failing stage: UNKNOWN
+- Failing stage: NONE
 - Logs:
-  - debug_screenshots/20260304_000605_grok_send.txt
-  - debug_screenshots/20260304_000605_grok_serialtabs_smoke.txt
-  - debug_screenshots/20260304_001136_grok_send.txt
-  - debug_screenshots/20260304_001136_grok_serialtabs_smoke.txt
-  - debug_screenshots/20260304_001332_grok_send.txt
-  - debug_screenshots/20260304_001332_grok_serialtabs_smoke.txt
-  - debug_screenshots/20260304_001603_grok_send.txt
-  - debug_screenshots/20260304_001604_grok_serialtabs_smoke.txt
-  - outbox/llm-web-arena/artifacts/notes/grok_focus_guard_batch20_20260304_071449.md
+  - outbox/llm-web-arena/artifacts/notes/round1-20260304_123404-6d216be5.md
+  - outbox/llm-web-arena/artifacts/notes/round2-20260304_130820-01ceca75.md
+  - outbox/llm-web-arena/artifacts/notes/round2-20260304_130820-01ceca75_cross_table.csv
+  - outbox/llm-web-arena/artifacts/notes/round2-20260304_130820-01ceca75_report.json
 - Screenshots:
   - UNKNOWN
 - DOM / selectors (snippet):
-  - input candidate: serialtabs: config locators
-  - send button: serialtabs: config locators
-  - assistant message container: serialtabs: config locators
+  - input candidate: ver01/config/config.example.json::sites.*.locators.input
+  - send button: ver01/config/config.example.json::sites.*.locators.send
+  - assistant message container: ver01/config/config.example.json::sites.*.locators.reply_container
 - Code pointers:
   - src/web_llm_arena/cli.py
   - src/web_llm_arena/status_updater.py
@@ -88,18 +83,18 @@ DEFINITION_OF_DONE:
 - S6 CAPTURE_REPLY:
   - Condition: last assistant reply captured and post-processed.
 - Timeouts:
-  - page_load_sec=30, element_wait_sec=20, reply_done_wait_sec=120, poll_interval_sec=1.0
+  - page_load_sec=30, element_wait_sec=20, reply_done_wait_sec=60, poll_interval_sec=0.5
 
 ## EXPERIMENTS (latest first)
 ### E00 (2026-03-04)
 Change:
 - Baseline migration snapshot; no new mitigation introduced.
 Setup:
-- Input size: 0 chars
+- Input size: 145 chars
 - Runs: 20
 Result:
-- Pass rate: 6/20
-- Failure mode: UNKNOWN: grok smoke batch20: pass_rate=13/20; focus_issue_hit_rate=1/20; verification_hit_rate=0/20; top_fail_stage=UNKNOWN; error_buckets={'SEND_FAILED_OTHER': 7}
+- Pass rate: 8/20
+- Failure mode: UNKNOWN
 Conclusion:
 - Baseline established for future controlled experiments.
 Next:
